@@ -50,11 +50,10 @@ function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 min-h-screen bg-gradient-to-b from-blue-700 to-indigo-800 text-white shadow-xl">
+    <aside className="w-64 min-h-screen bg-gradient-to-b from-blue-700 to-indigo-800 text-white shadow-xl flex flex-col">
 
       {/* Logo */}
       <div className="p-6 text-center border-b border-blue-500">
-
         <FaGraduationCap className="text-5xl mx-auto mb-3 text-yellow-300" />
 
         <h1 className="text-2xl font-bold">
@@ -64,12 +63,10 @@ function Sidebar() {
         <p className="text-sm text-blue-100 mt-2">
           AI Powered Learning
         </p>
-
       </div>
 
       {/* Menu */}
-      <nav className="mt-6">
-
+      <nav className="flex-1 mt-6">
         {menuItems.map((item) => (
           <NavLink
             key={item.name}
@@ -83,16 +80,20 @@ function Sidebar() {
             }
           >
             <span className="text-xl">{item.icon}</span>
-
             <span>{item.name}</span>
           </NavLink>
         ))}
-
       </nav>
 
       {/* Footer */}
-      <div className="absolute bottom-5 w-64 text-center text-sm text-blue-200">
-        Version 1.0 🚀
+      <div className="border-t border-blue-500 p-4 text-center text-sm text-blue-200">
+        <p>
+          Version <span className="font-semibold">1.0</span> 🚀
+        </p>
+
+        <p className="text-xs mt-2 text-blue-300">
+          © 2026 Guna Lalitha Keerthi
+        </p>
       </div>
 
     </aside>
