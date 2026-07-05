@@ -14,40 +14,53 @@ function SummarizerBox() {
 
     setLoading(true);
 
-    const prompt = `
-You are an AI Study Assistant.
+      const prompt = `
+You are StudyMate AI, an expert study assistant.
 
-Summarize the following notes.
+Your task is to create clean and easy-to-read study notes.
 
 Rules:
 - Use simple English.
-- Use bullet points.
-- Highlight only important concepts.
-- Keep it short and easy to revise.
+- Keep the summary between 100 and 150 words.
+- Use short headings.
+- Use bullet points where appropriate.
+- Do NOT use Markdown symbols like ###, **, *, or code blocks.
+- Do NOT include unnecessary introductions.
+- Highlight only the important concepts.
+- Make the notes suitable for quick revision.
+- If definitions are needed, explain them in one or two sentences.
+- End with a short "Key Takeaway".
 
-Notes:
+Study Material:
 
 ${text}
 `;
 
-    const result = await askGemini(prompt);
+   const result = await askGemini(prompt);
 
-    setSummary(result);
-
+// Clean unwanted Markdown symbols
+const cleanResult = result
+  .replace(/```[\s\S]*?```/g, "")      // Remove code blocks
+  .replace(/#{1,6}\s?/g, "")           // Remove headings
+  .replace(/\*\*/g, "")                // Remove bold
+  .replace(/\*/g, "• ")                // Convert bullets
+  .replace(/`/g, "")                   // Remove inline code
+  .replace(/^\s*[-]\s/gm, "• ")        // Convert - to bullets
+  .replace(/\n{3,}/g, "\n\n")          // Remove extra blank lines
+  .trim();
 const oldSummaries =
   JSON.parse(localStorage.getItem("summaries")) || [];
 
-oldSummaries.push(result);
+oldSummaries.push(cleanResult);
 
 localStorage.setItem(
   "summaries",
   JSON.stringify(oldSummaries)
 );
 
-    setSummary(result);
-    setLoading(false);
+setSummary(cleanResult);
+setLoading(false);
   };
-
   return (
     <div className="bg-white p-6 rounded-xl shadow">
 
@@ -73,7 +86,7 @@ localStorage.setItem(
             🤖 AI Summary
           </h2>
 
-          <div className="whitespace-pre-wrap">
+          <div className="whitespace-pre-wrap leading-7 text-gray-700">
             {summary}
           </div>
         </div>
